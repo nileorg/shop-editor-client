@@ -24,6 +24,19 @@ it('should stringify the request body', async () => {
   expect(actual).toBe(expected);
 });
 
+it('should send data as JSON', async () => {
+  const path = '/foo';
+  const body = { bar: 'baz' };
+  globalThis.fetch = jest.fn().mockResolvedValue({
+    ok: true,
+    json: jest.fn().mockResolvedValue({}),
+  } as unknown as Response);
+  await makeRequest(path, { body });
+  const expected = 'application/json';
+  const { headers } = (globalThis.fetch as jest.Mock).mock.calls[0][1];
+  expect(headers['Content-Type']).toBe(expected);
+});
+
 it('should fail when response is not OK', async () => {
   const path = '/foo';
   globalThis.fetch = jest.fn().mockResolvedValue({ ok: false } as unknown as Response);
