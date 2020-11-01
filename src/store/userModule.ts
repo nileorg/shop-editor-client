@@ -1,6 +1,6 @@
 import { ActionContext } from 'vuex';
 import login from '@/api/login';
-import { RootState, UserState } from './index.d';
+import { RootState, UserState } from './types';
 
 export enum MutationTypes {
   RECEIVE_AUTHENTICATION_TOKEN = 'RECEIVE_AUTHENTICATION_TOKEN_MUTATION',
