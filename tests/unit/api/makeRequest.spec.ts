@@ -8,7 +8,7 @@ it('should fetch the given path', async () => {
   } as unknown as Response);
   await makeRequest(path);
   expect(globalThis.fetch).toHaveBeenCalledTimes(1);
-  expect(globalThis.fetch).toHaveBeenCalledWith(`${process.env.API_BASE_URL}/foo`, { method: 'GET' });
+  expect(globalThis.fetch).toHaveBeenCalledWith('http://shop-editor.castignoli.it/foo', { method: 'GET' });
 });
 
 it('should stringify the request body', async () => {

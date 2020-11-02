@@ -1,7 +1,9 @@
 import { ActionContext } from 'vuex';
-import userModule, { ActionTypes, MutationTypes } from '@/store/userModule';
+import userModule from '@/store/userModule';
+import {
+  ActionTypes, MutationTypes, RootState, UserState,
+} from '@/store/types';
 import login from '@/api/login';
-import { RootState, UserState } from '@/store/types';
 
 jest.mock('@/api/login');
 
