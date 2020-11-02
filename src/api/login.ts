@@ -7,6 +7,7 @@ export default async (username: string, verificationCode: string) => {
       username,
       verification_code: verificationCode, // eslint-disable-line @typescript-eslint/camelcase
     },
+    testResponse: true,
   });
   return authenticationToken;
 };
