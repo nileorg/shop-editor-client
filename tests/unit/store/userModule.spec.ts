@@ -9,12 +9,12 @@ jest.mock('@/api/login');
 
 const { actions, mutations } = userModule;
 
-it('should receive authentication token', () => {
-  const receiveAuthenticationToken = mutations[MutationTypes.RECEIVE_AUTHENTICATION_TOKEN];
-  const initialState = { authenticationToken: '' };
-  const authenticationToken = 'foo';
-  const expected = { authenticationToken: 'foo' };
-  const actual = receiveAuthenticationToken(initialState, authenticationToken);
+it('should receive the user', () => {
+  const receiveAuthenticationToken = mutations[MutationTypes.RECEIVE_USER];
+  const initialState = { username: '', authenticationToken: '' };
+  const user = { username: 'foo', authenticationToken: 'bar' };
+  const expected = { username: 'foo', authenticationToken: 'bar' };
+  const actual = receiveAuthenticationToken(initialState, user);
   expect(actual).toStrictEqual(expected);
 });
 
@@ -30,7 +30,10 @@ it('should log in the user', async () => {
     { username, verificationCode },
   );
 
-  expect(commit).toHaveBeenCalledWith(MutationTypes.RECEIVE_AUTHENTICATION_TOKEN, 'baz');
+  expect(commit).toHaveBeenCalledWith(
+    MutationTypes.RECEIVE_USER,
+    { username: 'foo', authenticationToken: 'baz' },
+  );
 });
 
 afterEach(() => {

@@ -2,25 +2,22 @@ import { ActionContext } from 'vuex';
 import login from '@/api/login';
 import {
   ActionTypes,
+  Credentials,
   MutationTypes,
   RootState,
+  User,
   UserState,
 } from './types';
-
-type Credentials = {
-  username: string;
-  verificationCode: string;
-};
 
 export default {
   state: () => ({
     authenticationToken: '',
   }),
   mutations: {
-    [MutationTypes.RECEIVE_AUTHENTICATION_TOKEN]: (
-      (state: UserState, authenticationToken: string) => ({
+    [MutationTypes.RECEIVE_USER]: (
+      (state: UserState, user: User) => ({
         ...state,
-        authenticationToken,
+        ...user,
       })
     ),
   },
@@ -29,7 +26,8 @@ export default {
       async (context: ActionContext<UserState, RootState>, credentials: Credentials) => {
         const { username, verificationCode } = credentials;
         const authenticationToken = await login(username, verificationCode);
-        context.commit(MutationTypes.RECEIVE_AUTHENTICATION_TOKEN, authenticationToken);
+        const user = { username, authenticationToken };
+        context.commit(MutationTypes.RECEIVE_USER, user);
       }
     ),
   },

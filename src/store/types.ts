@@ -1,4 +1,5 @@
 export type UserState = {
+  username: string;
   authenticationToken: string;
 };
 
@@ -7,9 +8,19 @@ export type RootState = {
 };
 
 export enum MutationTypes {
-  RECEIVE_AUTHENTICATION_TOKEN = 'RECEIVE_AUTHENTICATION_TOKEN_MUTATION',
+  RECEIVE_USER = 'RECEIVE_USER_MUTATION',
 }
 
 export enum ActionTypes {
   LOGIN = 'LOGIN_ACTION',
 }
+
+export type Credentials = {
+  username: string;
+  verificationCode: string;
+};
+
+export type User = {
+  username: string;
+  authenticationToken: string;
+};
