@@ -25,6 +25,15 @@ it('should send the given credentials', async () => {
   expect(actual).toStrictEqual(expected);
 });
 
+it('should ask for a text response', async () => {
+  const username = 'foo';
+  const verificationCode = 'bar';
+  await login(username, verificationCode);
+  const expected = true;
+  const { testResponse: actual } = (makeRequest as jest.Mock).mock.calls[0][1];
+  expect(actual).toBe(expected);
+});
+
 it('should send a POST request', async () => {
   const username = 'foo';
   const verificationCode = 'bar';
@@ -41,6 +50,10 @@ it('should provide the authentication token', async () => {
   const expected = 'baz';
   const actual = await login(username, verificationCode);
   expect(actual).toBe(expected);
+});
+
+afterEach(() => {
+  (makeRequest as jest.Mock).mockReset();
 });
 
 afterAll(() => {

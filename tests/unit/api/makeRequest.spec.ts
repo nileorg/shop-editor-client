@@ -53,3 +53,14 @@ it('should provide the response parsed body', async () => {
   const actual = await makeRequest(path);
   expect(actual).toStrictEqual(expected);
 });
+
+it('should provide the response text body', async () => {
+  const path = '/foo';
+  globalThis.fetch = jest.fn().mockResolvedValue({
+    ok: true,
+    text: jest.fn().mockResolvedValue('bar'),
+  } as unknown as Response);
+  const expected = 'bar';
+  const actual = await makeRequest(path, { testResponse: true });
+  expect(actual).toBe(expected);
+});

@@ -33,6 +33,10 @@ it('should log in the user', async () => {
   expect(commit).toHaveBeenCalledWith(MutationTypes.RECEIVE_AUTHENTICATION_TOKEN, 'baz');
 });
 
+afterEach(() => {
+  (login as jest.Mock).mockReset();
+});
+
 afterAll(() => {
   (login as jest.Mock).mockRestore();
 });
