@@ -20,13 +20,14 @@
         v-model="verificationCode"
       />
     </div>
-    <button type="submit" class="btn btn-primary">Log in</button>
+    <button type="submit" class="btn btn-primary" v-bind:disabled="disabled">Log in</button>
   </form>
 </template>
 
 <script lang="ts">
-import { ActionTypes } from '@/store/types';
+import { ActionTypes, GetterTypes } from '@/store/types';
 import { defineComponent } from 'vue';
+import { mapGetters } from 'vuex';
 
 export default defineComponent({
   name: 'LoginForm',
@@ -34,6 +35,11 @@ export default defineComponent({
     username: '',
     verificationCode: '',
   }),
+  computed: {
+    ...mapGetters({
+      disabled: GetterTypes.LOADING,
+    }),
+  },
   methods: {
     onSubmit(event: Event) {
       event.preventDefault();
