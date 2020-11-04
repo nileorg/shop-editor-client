@@ -14,12 +14,10 @@ export default {
     authenticationToken: '',
   }),
   mutations: {
-    [MutationTypes.RECEIVE_USER]: (
-      (state: UserState, user: User) => ({
-        ...state,
-        ...user,
-      })
-    ),
+    [MutationTypes.RECEIVE_USER]: (state: UserState, user: User) => {
+      state.username = user.username;
+      state.authenticationToken = user.authenticationToken;
+    },
   },
   actions: {
     [ActionTypes.LOGIN]: (

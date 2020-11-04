@@ -10,11 +10,12 @@ jest.mock('@/api/login');
 const { actions, mutations } = userModule;
 
 it('should receive the user', () => {
-  const receiveAuthenticationToken = mutations[MutationTypes.RECEIVE_USER];
-  const initialState = { username: '', authenticationToken: '' };
+  const receiveUserMutation = mutations[MutationTypes.RECEIVE_USER];
+  const state = { username: '', authenticationToken: '' };
   const user = { username: 'foo', authenticationToken: 'bar' };
   const expected = { username: 'foo', authenticationToken: 'bar' };
-  const actual = receiveAuthenticationToken(initialState, user);
+  receiveUserMutation(state, user);
+  const actual = state;
   expect(actual).toStrictEqual(expected);
 });
 

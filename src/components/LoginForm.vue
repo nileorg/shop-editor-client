@@ -27,7 +27,6 @@
 <script lang="ts">
 import { ActionTypes, GetterTypes } from '@/store/types';
 import { defineComponent } from 'vue';
-import { mapGetters } from 'vuex';
 
 export default defineComponent({
   name: 'LoginForm',
@@ -36,9 +35,9 @@ export default defineComponent({
     verificationCode: '',
   }),
   computed: {
-    ...mapGetters({
-      disabled: GetterTypes.LOADING,
-    }),
+    disabled(): boolean {
+      return this.$store.getters[GetterTypes.LOADING];
+    },
   },
   methods: {
     onSubmit(event: Event) {
