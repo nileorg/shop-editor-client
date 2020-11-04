@@ -5,6 +5,7 @@ export type UserState = {
 
 export type NotificationState = {
   loadingCount: number;
+  notifications: Notification[];
 };
 
 export type RootState = {
@@ -16,6 +17,8 @@ export enum MutationTypes {
   RECEIVE_USER = 'RECEIVE_USER_MUTATION',
   INCREMENT_LOADING_COUNT = 'INCREMENT_LOADING_COUNT_MUTATION',
   DECREMENT_LOADING_COUNT = 'DECREMENT_LOADING_COUNT_MUTATION',
+  RECEIVE_NOTIFICATION = 'RECEIVE_NOTIFICATION_MUTATION',
+  REMOVE_NOTIFICATION = 'REMOVE_NOTIFICATION_MUTATION',
 }
 
 export enum ActionTypes {
@@ -34,4 +37,11 @@ export type Credentials = {
 export type User = {
   username: string;
   authenticationToken: string;
+};
+
+export type Notification = {
+  id: string;
+  title: string;
+  description: string;
+  date: number;
 };
