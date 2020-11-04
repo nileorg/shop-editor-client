@@ -39,7 +39,7 @@ it('should disable the submit button when loading', async () => {
   loadingGetter.mockReturnValue(true);
   const wrapper = mount(LoginForm, { global: { mocks: { $store } } });
   const expected = '';
-  const actual = await wrapper.find('button').attributes('disabled');
+  const actual = wrapper.find('button').attributes('disabled');
   await wrapper.find('#loginFormVerificationCode').setValue('bar');
   expect(actual).toBe(expected);
 });
