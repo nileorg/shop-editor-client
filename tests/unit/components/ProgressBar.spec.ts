@@ -2,26 +2,22 @@ import { mount } from '@vue/test-utils';
 import ProgressBar from '@/components/ProgressBar.vue';
 import { GetterTypes } from '@/store/types';
 
-const loadingGetter = jest.fn();
-const getters = {
-  [GetterTypes.LOADING]: loadingGetter,
-};
-const $store = { getters };
-
-beforeEach(() => {
-  loadingGetter.mockReset();
+const createStore = ({ loading }: { loading: boolean }) => ({
+  getters: {
+    [GetterTypes.LOADING]: loading,
+  },
 });
 
 it('should show the progress bar when loading', () => {
-  loadingGetter.mockReturnValue(true);
+  const $store = createStore({ loading: true });
   const wrapper = mount(ProgressBar, { global: { mocks: { $store } } });
   const element = wrapper.find('div.progress');
-  expect(element).toBeDefined();
+  expect(element.exists()).toBe(true);
 });
 
 it('should hide the progress bar when not loading', () => {
-  loadingGetter.mockReturnValue(false);
+  const $store = createStore({ loading: false });
   const wrapper = mount(ProgressBar, { global: { mocks: { $store } } });
   const element = wrapper.find('div.progress');
-  expect(element).toBeUndefined();
+  expect(element.exists()).toBe(false);
 });

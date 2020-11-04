@@ -2,20 +2,15 @@ import { mount } from '@vue/test-utils';
 import LoginForm from '@/components/LoginForm.vue';
 import { ActionTypes, GetterTypes } from '@/store/types';
 
-const dispatch = jest.fn();
-
-const loadingGetter = jest.fn();
-const getters = {
-  [GetterTypes.LOADING]: loadingGetter,
-};
-
-const $store = { dispatch, getters };
-
-beforeEach(() => {
-  dispatch.mockReset();
+const createStore = ({ dispatch, loading }: { dispatch: Function; loading: boolean }) => ({
+  dispatch,
+  getters: {
+    [GetterTypes.LOADING]: loading,
+  },
 });
 
 it('should receive user credentials', async () => {
+  const $store = createStore({ dispatch: jest.fn(), loading: false });
   const wrapper = mount(LoginForm, { global: { mocks: { $store } } });
   await wrapper.find('#loginFormUsername').setValue('foo');
   await wrapper.find('#loginFormVerificationCode').setValue('bar');
@@ -24,6 +19,8 @@ it('should receive user credentials', async () => {
 });
 
 it('should login the user when the form is submitted', async () => {
+  const dispatch = jest.fn();
+  const $store = createStore({ dispatch, loading: false });
   const wrapper = mount(LoginForm, { global: { mocks: { $store } } });
   await wrapper.find('#loginFormUsername').setValue('foo');
   await wrapper.find('#loginFormVerificationCode').setValue('bar');
@@ -36,7 +33,7 @@ it('should login the user when the form is submitted', async () => {
 });
 
 it('should disable the submit button when loading', async () => {
-  loadingGetter.mockReturnValue(true);
+  const $store = createStore({ dispatch: jest.fn(), loading: true });
   const wrapper = mount(LoginForm, { global: { mocks: { $store } } });
   const expected = '';
   const actual = wrapper.find('button').attributes('disabled');
