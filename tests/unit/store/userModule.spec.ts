@@ -31,10 +31,14 @@ it('should log in the user', async () => {
     { username, verificationCode },
   );
 
-  expect(commit).toHaveBeenCalledWith(
+  expect(commit).toHaveBeenCalledTimes(3);
+  expect(commit).toHaveBeenNthCalledWith(1, MutationTypes.INCREMENT_LOADING_COUNT);
+  expect(commit).toHaveBeenNthCalledWith(
+    2,
     MutationTypes.RECEIVE_USER,
     { username: 'foo', authenticationToken: 'baz' },
   );
+  expect(commit).toHaveBeenNthCalledWith(3, MutationTypes.DECREMENT_LOADING_COUNT);
 });
 
 afterEach(() => {
