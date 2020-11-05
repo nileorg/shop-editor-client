@@ -1,4 +1,5 @@
 import { createStore } from 'vuex';
+import { isProduction } from '@/utils/environment';
 import notificationModule from './notificationModule';
 import userModule from './userModule';
 
@@ -7,5 +8,5 @@ export default createStore({
     notifications: notificationModule,
     user: userModule,
   },
-  strict: process.env.NODE_ENV !== 'production',
+  strict: !isProduction(),
 });

@@ -1,5 +1,8 @@
 import {
-  GetterTypes, MutationTypes, Notification, NotificationState,
+  GetterTypes,
+  MutationTypes,
+  Notification,
+  NotificationState,
 } from './types';
 
 export default {

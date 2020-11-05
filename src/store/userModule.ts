@@ -1,5 +1,6 @@
 import { ActionContext } from 'vuex';
 import login from '@/api/login';
+import { logError } from '@/utils/logger';
 import {
   ActionTypes,
   Credentials,
@@ -8,6 +9,7 @@ import {
   User,
   UserState,
 } from './types';
+import createNotification from './createNotification';
 
 export default {
   state: () => ({
@@ -28,6 +30,13 @@ export default {
           const authenticationToken = await login(username, verificationCode);
           const user = { username, authenticationToken };
           context.commit(MutationTypes.RECEIVE_USER, user);
+        } catch (error) {
+          logError(error);
+          const notification = createNotification({
+            title: 'Login failed',
+            description: 'Please check your credentials.',
+          });
+          context.commit(MutationTypes.RECEIVE_NOTIFICATION, notification);
         } finally {
           context.commit(MutationTypes.DECREMENT_LOADING_COUNT);
         }

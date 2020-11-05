@@ -3,11 +3,18 @@ import userModule from '@/store/userModule';
 import {
   ActionTypes, MutationTypes, RootState, UserState,
 } from '@/store/types';
+import createNotification from '@/store/createNotification';
 import login from '@/api/login';
 
 jest.mock('@/api/login');
+jest.mock('@/store/createNotification');
 
 const { actions, mutations } = userModule;
+
+beforeEach(() => {
+  (login as jest.Mock).mockReset();
+  (createNotification as jest.Mock).mockReset();
+});
 
 it('should receive the user', () => {
   const receiveUserMutation = mutations[MutationTypes.RECEIVE_USER];
@@ -41,10 +48,27 @@ it('should log in the user', async () => {
   expect(commit).toHaveBeenNthCalledWith(3, MutationTypes.DECREMENT_LOADING_COUNT);
 });
 
-afterEach(() => {
-  (login as jest.Mock).mockReset();
+it('should notify when the login fails', async () => {
+  (login as jest.Mock).mockRejectedValue(new Error('foo'));
+  (createNotification as jest.Mock).mockImplementation((data) => data);
+
+  const commit = jest.fn();
+  const context = { commit } as unknown as ActionContext<UserState, RootState>;
+  const credentials = { username: '', verificationCode: '' };
+
+  const loginAction = actions[ActionTypes.LOGIN];
+  await loginAction(context, credentials);
+
+  expect(commit).toHaveBeenCalledWith(
+    MutationTypes.RECEIVE_NOTIFICATION,
+    {
+      title: 'Login failed',
+      description: 'Please check your credentials.',
+    },
+  );
 });
 
 afterAll(() => {
   (login as jest.Mock).mockRestore();
+  (createNotification as jest.Mock).mockRestore();
 });
