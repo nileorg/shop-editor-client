@@ -14,7 +14,7 @@ import { defineComponent } from 'vue';
 import ProgressBar from '@/components/ProgressBar.vue';
 
 export default defineComponent({
-  name: 'ProgressBar',
+  name: 'App',
   components: {
     ProgressBar,
   },
