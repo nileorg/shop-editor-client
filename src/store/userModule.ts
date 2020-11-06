@@ -1,6 +1,7 @@
 import { ActionContext } from 'vuex';
 import login from '@/api/login';
 import { logError } from '@/utils/logger';
+import router from '@/router';
 import {
   ActionTypes,
   Credentials,
@@ -13,6 +14,7 @@ import createNotification from './createNotification';
 
 export default {
   state: () => ({
+    username: '',
     authenticationToken: '',
   }),
   mutations: {
@@ -30,6 +32,7 @@ export default {
           const authenticationToken = await login(username, verificationCode);
           const user = { username, authenticationToken };
           context.commit(MutationTypes.RECEIVE_USER, user);
+          router.push('/');
         } catch (error) {
           logError(error);
           const notification = createNotification({

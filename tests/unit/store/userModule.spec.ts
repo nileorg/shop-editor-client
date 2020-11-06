@@ -5,6 +5,7 @@ import {
 } from '@/store/types';
 import createNotification from '@/store/createNotification';
 import login from '@/api/login';
+import router from '@/router';
 
 jest.mock('@/api/login');
 jest.mock('@/store/createNotification');
@@ -46,6 +47,23 @@ it('should log in the user', async () => {
     { username: 'foo', authenticationToken: 'baz' },
   );
   expect(commit).toHaveBeenNthCalledWith(3, MutationTypes.DECREMENT_LOADING_COUNT);
+});
+
+it('should redirect the user to the home page when logged in', async () => {
+  const username = '';
+  const verificationCode = '';
+  (login as jest.Mock).mockResolvedValueOnce('');
+  const commit = jest.fn();
+  const pushSpy = jest.spyOn(router, 'push');
+
+  const loginAction = actions[ActionTypes.LOGIN];
+  await loginAction(
+    { commit } as unknown as ActionContext<UserState, RootState>,
+    { username, verificationCode },
+  );
+
+  expect(pushSpy).toHaveBeenCalledTimes(1);
+  expect(pushSpy).toHaveBeenCalledWith('/');
 });
 
 it('should notify when the login fails', async () => {
