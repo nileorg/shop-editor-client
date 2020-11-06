@@ -1,34 +1,37 @@
 <template>
-  <div style="position: relative; min-height: 200px;">
-    <div style="position: absolute; top: 0; right: 0;">
-      <!-- Then put toasts within -->
-      <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-          <img src="..." class="rounded mr-2" alt="...">
-          <strong class="mr-auto">Bootstrap</strong>
-          <small class="text-muted">just now</small>
-          <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="toast-body">
-          See? Just like this.
-        </div>
-      </div>
-
-      <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-          <img src="..." class="rounded mr-2" alt="...">
-          <strong class="mr-auto">Bootstrap</strong>
-          <small class="text-muted">2 seconds ago</small>
-          <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="toast-body">
-          Heads up, toasts will stack automatically
-        </div>
+  <div class="row">
+    <div class="col">
+      <div
+        v-for="notification in notifications"
+        v-bind:key="notification.id"
+        class="alert alert-danger alert-dismissible fade show"
+        role="alert"
+      >
+        <h4 class="alert-heading">{{ notification.title }}</h4>
+        <p>{{ notification.description }}</p>
+        <button v-on:click="dismiss(notification.id)" type="button" class="close">
+          <span>&times;</span>
+        </button>
       </div>
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { MutationTypes } from '@/store/types';
+
+export default defineComponent({
+  name: 'Notifications',
+  computed: {
+    notifications() {
+      return this.$store.state.notifications.notifications;
+    },
+  },
+  methods: {
+    dismiss(id: string) {
+      this.$store.commit(MutationTypes.REMOVE_NOTIFICATION, id);
+    },
+  },
+});
+</script>
