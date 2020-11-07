@@ -8,6 +8,10 @@ export type NotificationState = {
   notifications: Notification[];
 };
 
+export type ShopState = {
+  products: Product[];
+};
+
 export type RootState = {
   notifications: NotificationState;
   user: UserState;
@@ -19,10 +23,13 @@ export enum MutationTypes {
   DECREMENT_LOADING_COUNT = 'DECREMENT_LOADING_COUNT_MUTATION',
   RECEIVE_NOTIFICATION = 'RECEIVE_NOTIFICATION_MUTATION',
   REMOVE_NOTIFICATION = 'REMOVE_NOTIFICATION_MUTATION',
+  RECEIVE_PRODUCTS = 'RECEIVE_PRODUCTS_MUTATION',
+  CLEAR_PRODUCTS = 'CLEAR_PRODUCTS_MUTATION',
 }
 
 export enum ActionTypes {
   LOGIN = 'LOGIN_ACTION',
+  GET_PRODUCTS = 'GET_PRODUCTS_ACTION',
 }
 
 export enum GetterTypes {
@@ -44,4 +51,12 @@ export type Notification = {
   title: string;
   description: string;
   date: number;
+};
+
+export type Product = {
+  name: string;
+  image: string;
+  description: string;
+  price: number;
+  tags: string[];
 };
