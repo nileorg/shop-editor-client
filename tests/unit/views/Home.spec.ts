@@ -1,5 +1,6 @@
-import { mount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import Home from '@/views/Home.vue';
+import Products from '@/components/Products.vue';
 
 it('should display a greeting message when the user is logged in', () => {
   const $store = {
@@ -9,7 +10,7 @@ it('should display a greeting message when the user is logged in', () => {
       },
     },
   };
-  const wrapper = mount(
+  const wrapper = shallowMount(
     Home,
     {
       global: {
@@ -33,7 +34,7 @@ it('should display a greeting message when the user is not logged in', () => {
       },
     },
   };
-  const wrapper = mount(
+  const wrapper = shallowMount(
     Home,
     {
       global: {
@@ -45,6 +46,30 @@ it('should display a greeting message when the user is not logged in', () => {
 
   const expected = 'Please log in or register a new account.';
   const actual = wrapper.find('div.jumbotron div p').text();
+
+  expect(actual).toBe(expected);
+});
+
+it('should display user products', () => {
+  const $store = {
+    state: {
+      user: {
+        username: 'foo',
+      },
+    },
+  };
+  const wrapper = shallowMount(
+    Home,
+    {
+      global: {
+        mocks: { $store },
+        stubs: ['router-link'],
+      },
+    },
+  );
+
+  const expected = true;
+  const actual = wrapper.findComponent(Products).exists();
 
   expect(actual).toBe(expected);
 });

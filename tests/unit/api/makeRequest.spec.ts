@@ -49,7 +49,7 @@ it('should send the authentication token', async () => {
     json: () => Promise.resolve(),
   } as Response);
 
-  const expected = { Authentication: 'Bearer bar' };
+  const expected = { Authorization: 'Bearer bar' };
   await makeRequest('/foo', { authenticationToken: 'bar' });
   const { headers: actual } = fetchMock.mock.calls[0][1] as RequestInit;
   expect(actual).toStrictEqual(expected);

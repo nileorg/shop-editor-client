@@ -15,6 +15,7 @@ export type ShopState = {
 export type RootState = {
   notifications: NotificationState;
   user: UserState;
+  shop: ShopState;
 };
 
 export enum MutationTypes {

@@ -11,13 +11,21 @@
       <router-link class="btn btn-primary btn-lg" to="/login" role="button">Login</router-link>
     </div>
   </div>
+  <div v-if="username">
+    <h2>My Products</h2>
+    <Products />
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import Products from '@/components/Products.vue';
 
 export default defineComponent({
   name: 'Home',
+  components: {
+    Products,
+  },
   computed: {
     username() {
       return this.$store.state.user.username;

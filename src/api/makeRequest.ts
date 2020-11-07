@@ -7,7 +7,7 @@ type Parameters = {
 
 const buildHeaders = (contentType?: string, authenticationToken?: string) => ({
   ...(contentType ? { 'Content-Type': contentType } : {}),
-  ...(authenticationToken ? { Authentication: `Bearer ${authenticationToken}` } : {}),
+  ...(authenticationToken ? { Authorization: `Bearer ${authenticationToken}` } : {}),
 });
 
 export default async (path: string, parameters?: Parameters) => {
