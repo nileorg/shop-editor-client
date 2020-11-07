@@ -1,66 +1,85 @@
 import makeRequest from '@/api/makeRequest';
 
+const fetchMock = jest.fn();
+globalThis.fetch = fetchMock;
+
+beforeEach(() => {
+  fetchMock.mockReset();
+});
+
 it('should fetch the given path', async () => {
-  const path = '/foo';
-  globalThis.fetch = jest.fn().mockResolvedValue({
+  fetchMock.mockResolvedValueOnce({
     ok: true,
-    json: jest.fn().mockResolvedValue({}),
-  } as unknown as Response);
-  await makeRequest(path);
-  expect(globalThis.fetch).toHaveBeenCalledTimes(1);
-  expect(globalThis.fetch).toHaveBeenCalledWith('http://shop-editor.castignoli.it/foo', { method: 'GET' });
+    json: () => Promise.resolve(),
+  } as Response);
+  await makeRequest('/foo');
+  expect(fetchMock).toHaveBeenCalledTimes(1);
+  expect(fetchMock).toHaveBeenCalledWith(
+    'http://shop-editor.castignoli.it/foo',
+    { method: 'GET', headers: {} },
+  );
 });
 
 it('should stringify the request body', async () => {
-  const path = '/foo';
-  const body = { bar: 'baz' };
-  globalThis.fetch = jest.fn().mockResolvedValue({
+  fetchMock.mockResolvedValue({
     ok: true,
-    json: jest.fn().mockResolvedValue({}),
-  } as unknown as Response);
-  await makeRequest(path, { body });
+    json: () => Promise.resolve(),
+  } as Response);
   const expected = '{"bar":"baz"}';
-  const { body: actual } = (globalThis.fetch as jest.Mock).mock.calls[0][1];
+  await makeRequest('foo', { body: { bar: 'baz' } });
+  const { body: actual } = fetchMock.mock.calls[0][1] as RequestInit;
   expect(actual).toBe(expected);
 });
 
 it('should send data as JSON', async () => {
-  const path = '/foo';
-  const body = { bar: 'baz' };
-  globalThis.fetch = jest.fn().mockResolvedValue({
+  fetchMock.mockResolvedValue({
     ok: true,
-    json: jest.fn().mockResolvedValue({}),
-  } as unknown as Response);
-  await makeRequest(path, { body });
+    json: () => Promise.resolve(),
+  } as Response);
   const expected = 'application/json';
-  const { headers } = (globalThis.fetch as jest.Mock).mock.calls[0][1];
-  expect(headers['Content-Type']).toBe(expected);
+  await makeRequest('/foo', { body: { bar: 'baz' } });
+  const { headers } = fetchMock.mock.calls[0][1] as RequestInit;
+  const actual = (headers as { 'Content-Type': string })['Content-Type'];
+  expect(actual).toBe(expected);
+});
+
+it('should send the authentication token', async () => {
+  fetchMock.mockResolvedValueOnce({
+    ok: true,
+    json: () => Promise.resolve(),
+  } as Response);
+
+  const expected = { Authentication: 'Bearer bar' };
+  await makeRequest('/foo', { authenticationToken: 'bar' });
+  const { headers: actual } = fetchMock.mock.calls[0][1] as RequestInit;
+  expect(actual).toStrictEqual(expected);
 });
 
 it('should fail when response is not OK', async () => {
-  const path = '/foo';
-  globalThis.fetch = jest.fn().mockResolvedValue({ ok: false } as unknown as Response);
-  await expect(makeRequest(path)).rejects.toBeInstanceOf(Error);
+  fetchMock.mockResolvedValue({ ok: false } as unknown as Response);
+  await expect(makeRequest('/foo')).rejects.toBeInstanceOf(Error);
 });
 
 it('should provide the response parsed body', async () => {
-  const path = '/foo';
-  globalThis.fetch = jest.fn().mockResolvedValue({
+  fetchMock.mockResolvedValue({
     ok: true,
-    json: jest.fn().mockResolvedValue({ bar: 'baz' }),
-  } as unknown as Response);
+    json: () => Promise.resolve({ bar: 'baz' }),
+  } as Response);
   const expected = { bar: 'baz' };
-  const actual = await makeRequest(path);
+  const actual = await makeRequest('/foo');
   expect(actual).toStrictEqual(expected);
 });
 
 it('should provide the response text body', async () => {
-  const path = '/foo';
-  globalThis.fetch = jest.fn().mockResolvedValue({
+  fetchMock.mockResolvedValue({
     ok: true,
-    text: jest.fn().mockResolvedValue('bar'),
-  } as unknown as Response);
+    text: () => Promise.resolve('bar'),
+  } as Response);
   const expected = 'bar';
-  const actual = await makeRequest(path, { testResponse: true });
+  const actual = await makeRequest('/foo', { testResponse: true });
   expect(actual).toBe(expected);
+});
+
+afterAll(() => {
+  fetchMock.mockRestore();
 });
