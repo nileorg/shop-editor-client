@@ -1,6 +1,6 @@
 type Parameters = {
   method?: string;
-  body?: object;
+  body?: Record<string, unknown>;
   testResponse?: boolean;
   authenticationToken?: string;
 };
@@ -10,7 +10,10 @@ const buildHeaders = (contentType?: string, authenticationToken?: string) => ({
   ...(authenticationToken ? { Authorization: `Bearer ${authenticationToken}` } : {}),
 });
 
-export default async (path: string, parameters?: Parameters) => {
+export default async (
+  path: string,
+  parameters?: Parameters,
+): Promise<Record<string, unknown> | Record<string, unknown>[] | string> => {
   const url = `${process.env.VUE_APP_API_BASE_URL}${path}`;
   const headers = buildHeaders(parameters?.body && 'application/json', parameters?.authenticationToken);
   const response = await fetch(url, {
@@ -24,5 +27,5 @@ export default async (path: string, parameters?: Parameters) => {
   if (parameters?.testResponse) {
     return response.text();
   }
-  return response.json(); // @todo check it works with plain text response body
+  return response.json();
 };

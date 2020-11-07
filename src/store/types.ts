@@ -1,3 +1,28 @@
+export type Credentials = {
+  username: string;
+  verificationCode: string;
+};
+
+export type User = {
+  username: string;
+  authenticationToken: string;
+};
+
+export type Notification = {
+  id: string;
+  title: string;
+  description: string;
+  date: number;
+};
+
+export type Product = {
+  name: string;
+  image: string;
+  description: string;
+  price: number;
+  tags: string[];
+};
+
 export type UserState = {
   username: string;
   authenticationToken: string;
@@ -36,28 +61,3 @@ export enum ActionTypes {
 export enum GetterTypes {
   LOADING = 'LOADING_GETTER',
 }
-
-export type Credentials = {
-  username: string;
-  verificationCode: string;
-};
-
-export type User = {
-  username: string;
-  authenticationToken: string;
-};
-
-export type Notification = {
-  id: string;
-  title: string;
-  description: string;
-  date: number;
-};
-
-export type Product = {
-  name: string;
-  image: string;
-  description: string;
-  price: number;
-  tags: string[];
-};

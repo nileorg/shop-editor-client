@@ -19,7 +19,7 @@ it('should send the given credentials', async () => {
   await login(username, verificationCode);
   const expected = {
     username: 'foo',
-    verification_code: 'bar', // eslint-disable-line @typescript-eslint/camelcase
+    verification_code: 'bar',
   };
   const { body: actual } = (makeRequest as jest.Mock).mock.calls[0][1];
   expect(actual).toStrictEqual(expected);

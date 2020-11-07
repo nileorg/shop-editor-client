@@ -1,8 +1,9 @@
 import { mount } from '@vue/test-utils';
+import { Dispatch } from 'vuex';
 import LoginForm from '@/components/LoginForm.vue';
 import { ActionTypes, GetterTypes } from '@/store/types';
 
-const createStore = ({ dispatch, loading }: { dispatch: Function; loading: boolean }) => ({
+const createStore = ({ dispatch, loading }: { dispatch: Dispatch; loading: boolean }) => ({
   dispatch,
   getters: {
     [GetterTypes.LOADING]: loading,

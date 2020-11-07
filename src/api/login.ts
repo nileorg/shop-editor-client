@@ -1,13 +1,13 @@
 import makeRequest from './makeRequest';
 
-export default async (username: string, verificationCode: string) => {
+export default async (username: string, verificationCode: string): Promise<string> => {
   const authenticationToken = await makeRequest('/auth/login', {
     method: 'POST',
     body: {
       username,
-      verification_code: verificationCode, // eslint-disable-line @typescript-eslint/camelcase
+      verification_code: verificationCode,
     },
     testResponse: true,
   });
-  return authenticationToken;
+  return authenticationToken as string;
 };

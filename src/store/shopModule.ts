@@ -15,34 +15,36 @@ export default {
     products: [],
   },
   mutations: {
-    [MutationTypes.RECEIVE_PRODUCTS]: (state: ShopState, products: Product[]) => {
+    [MutationTypes.RECEIVE_PRODUCTS]: (state: ShopState, products: Product[]): void => {
       state.products = products;
     },
-    [MutationTypes.CLEAR_PRODUCTS]: (state: ShopState) => {
+    [MutationTypes.CLEAR_PRODUCTS]: (state: ShopState): void => {
       state.products = [];
     },
   },
   actions: {
-    [ActionTypes.GET_PRODUCTS]: async (context: ActionContext<ShopState, RootState>) => {
-      context.commit(MutationTypes.INCREMENT_LOADING_COUNT);
-      try {
-        const { authenticationToken } = context.rootState.user;
-        const products = await getShop(authenticationToken);
-        context.commit(MutationTypes.CLEAR_PRODUCTS);
-        context.commit(MutationTypes.RECEIVE_PRODUCTS, products);
-      } catch (error) {
-        logError(error);
-        const notification = createNotification({
-          title: 'Unable to fetch products',
-          description: (
-            `There was an error while retrieving the products of your shop.
-            Refresh the page or contact us if the error persist.`
-          ),
-        });
-        context.commit(MutationTypes.RECEIVE_NOTIFICATION, notification);
-      } finally {
-        context.commit(MutationTypes.DECREMENT_LOADING_COUNT);
+    [ActionTypes.GET_PRODUCTS]: (
+      async (context: ActionContext<ShopState, RootState>): Promise<void> => {
+        context.commit(MutationTypes.INCREMENT_LOADING_COUNT);
+        try {
+          const { authenticationToken } = context.rootState.user;
+          const products = await getShop(authenticationToken);
+          context.commit(MutationTypes.CLEAR_PRODUCTS);
+          context.commit(MutationTypes.RECEIVE_PRODUCTS, products);
+        } catch (error) {
+          logError(error);
+          const notification = createNotification({
+            title: 'Unable to fetch products',
+            description: (
+              `There was an error while retrieving the products of your shop.
+              Refresh the page or contact us if the error persist.`
+            ),
+          });
+          context.commit(MutationTypes.RECEIVE_NOTIFICATION, notification);
+        } finally {
+          context.commit(MutationTypes.DECREMENT_LOADING_COUNT);
+        }
       }
-    },
+    ),
   },
 };

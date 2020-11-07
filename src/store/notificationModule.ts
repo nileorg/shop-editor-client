@@ -6,26 +6,26 @@ import {
 } from './types';
 
 export default {
-  state: () => ({
+  state: (): NotificationState => ({
     loadingCount: 0,
     notifications: [],
   }),
   mutations: {
-    [MutationTypes.INCREMENT_LOADING_COUNT]: (state: NotificationState) => {
+    [MutationTypes.INCREMENT_LOADING_COUNT]: (state: NotificationState): void => {
       state.loadingCount += 1;
     },
-    [MutationTypes.DECREMENT_LOADING_COUNT]: (state: NotificationState) => {
+    [MutationTypes.DECREMENT_LOADING_COUNT]: (state: NotificationState): void => {
       state.loadingCount -= 1;
     },
     [MutationTypes.RECEIVE_NOTIFICATION]: (
-      (state: NotificationState, notification: Notification) => {
+      (state: NotificationState, notification: Notification): void => {
         state.notifications = [
           ...state.notifications,
           notification,
         ];
       }
     ),
-    [MutationTypes.REMOVE_NOTIFICATION]: (state: NotificationState, id: string) => {
+    [MutationTypes.REMOVE_NOTIFICATION]: (state: NotificationState, id: string): void => {
       const index = state.notifications.findIndex((notification) => notification.id === id);
       if (index >= 0) {
         state.notifications = [
@@ -36,6 +36,6 @@ export default {
     },
   },
   getters: {
-    [GetterTypes.LOADING]: (state: NotificationState) => Boolean(state.loadingCount),
+    [GetterTypes.LOADING]: (state: NotificationState): boolean => Boolean(state.loadingCount),
   },
 };
